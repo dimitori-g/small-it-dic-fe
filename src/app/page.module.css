@@ -3,9 +3,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* padding: 2rem; */
     min-height: 100vh;
-    /* max-width: 50vw; */
 }
 
 .main, .button, .input {
@@ -32,7 +30,6 @@
 }
 
 .button {
-    /* margin-right: 5px; */
 }
 
 .word_buttons {
@@ -47,9 +44,14 @@
 }
 
 .word {
-    /* border-bottom: aliceblue 1px dotted; */
     border-radius: 10px;
     background-color: rgb(75 83 108 / 40%);
     margin-bottom: 0.5rem;
     padding: 0.5rem;
+}
+
+.error {
+    display: flex;
+    justify-content: center;
+    color: red;
 }

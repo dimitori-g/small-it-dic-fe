@@ -107,6 +107,7 @@ function SearchComponent() {
         <button className={styles.button} onClick={() => setUpdWord({id:0, chinese:'', reading:'', english:''})}>create</button>
         <button className={styles.button} onClick={handleClear}>clear</button>
       </div>
+      {error && <div className={styles.error}>{error}</div>}
       <div className={styles.words}>
       {words.map((word: Word) => (
         <div key={word.id} className={styles.word}>
