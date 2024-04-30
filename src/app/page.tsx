@@ -18,12 +18,15 @@ export default function Page() {
 function SearchComponent() {
 
   const [searchTerm, setSearchTerm] = useState('filter');
-  const [words, setWords] = useState([]);
+  const [words, setWords] = useState<Word[]>([]);
+  const [updWord, setUpdWord] = useState<Word>();
   const [error, setError] = useState('');
 
   const handleSearch = async () => {
+    setError('');
     const response = await searchWords(searchTerm);
     if (response.data.error) {
+      setWords([]);
       setError(response.data.error.message)
     } else {
       setWords(response.data.data);
@@ -37,23 +40,57 @@ function SearchComponent() {
 
   const handleDelete = async (id: number) => {
     await deleteWord(id);
-    handleSearch(); // Refresh the list after deletion
+    handleSearch();
   };
 
-  const handleCreate = async () => {
-    const newWord = { id: 0, chinese: '新', reading: 'xīn', english: 'new' };
-    await createWord(newWord);
-    handleSearch(); // Refresh the list after adding new word
+  const handleCreate = async (word: Word) => {
+    await createWord(word);
+    setUpdWord(undefined);
+    handleSearch();
   };
 
   const handleClear = () => {
     setSearchTerm('');
+    setUpdWord(undefined);
     setWords([]);
   };
 
   const handleUpdate =async (word: Word) => {
     await updateWord(word);
-    handleSearch(); // Refresh the list after adding new word
+    setUpdWord(undefined);
+    handleSearch();
+  }
+
+  if (updWord) {
+    return (
+      <div className={styles.dictionary}>
+        <input
+          className={styles.input}
+          value={updWord.chinese}
+          onChange={(e) => setUpdWord({...updWord, chinese: e.target.value})}
+          placeholder='Chinese...'
+        />
+        <input
+          className={styles.input}
+          value={updWord.reading}
+          onChange={(e) => setUpdWord({...updWord, reading: e.target.value})}
+          placeholder='Reading...'
+        />
+        <input
+          className={styles.input}
+          value={updWord.english}
+          onChange={(e) => setUpdWord({...updWord, english: e.target.value})}
+          placeholder='English...'
+        />
+        <div className={styles.word_buttons}>
+          {updWord.id !== 0 ?
+            <button className={styles.button} onClick={() => handleUpdate(updWord)}>update</button>:
+            <button className={styles.button} onClick={() => handleCreate(updWord)}>create</button>
+          }
+          <button className={styles.button} onClick={() => setUpdWord(undefined)}>cancel</button>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -67,7 +104,7 @@ function SearchComponent() {
       />
       <div className={styles.buttons}>
         <button className={styles.button} onClick={handleSearch}>search</button>
-        <button disabled className={styles.button} onClick={handleCreate}>add</button>
+        <button className={styles.button} onClick={() => setUpdWord({id:0, chinese:'', reading:'', english:''})}>create</button>
         <button className={styles.button} onClick={handleClear}>clear</button>
       </div>
       <div className={styles.words}>
@@ -77,7 +114,7 @@ function SearchComponent() {
           <div>{word.reading}</div>
           <div>{word.english}</div>
           <div className={styles.word_buttons}>
-            <button className={styles.button} onClick={() => handleUpdate(word)}>update</button>
+            <button className={styles.button} onClick={() => setUpdWord(word)}>update</button>
             <button className={styles.button} disabled onClick={() => handleDelete(word.id)}>delete</button>
           </div>
         </div>
