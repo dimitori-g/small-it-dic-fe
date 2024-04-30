@@ -13,4 +13,4 @@ export const getWordById = (id: number) => api.get(`/${id}`);
 export const createWord = (word: Word) => api.post('', word);
 export const updateWord = (word: Word) => api.put('', word);
 export const deleteWord = (id: number) => api.delete(`/${id}`);
-export const searchWords = (query: string) => api.get(`/search?text=${query}`);;
+export const searchWords = (query: string) => api.get(`/search?text=${query}`);
