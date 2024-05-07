@@ -2,8 +2,8 @@
 
 import styles from  './page.module.css';
 
-import { useState } from 'react';
-import { createWord, deleteWord, searchWords, getAllWords, updateWord } from '../app/services/api';
+import { useEffect, useState } from 'react';
+import { createWord, deleteWord, searchWords, getAllWords, updateWord, getRandomWords } from '../app/services/api';
 import { Word } from './types/dictionary';
 
 export default function Page() {
@@ -17,14 +17,29 @@ export default function Page() {
 
 function SearchComponent() {
 
-  const [searchTerm, setSearchTerm] = useState('filter');
+  const [searchTerm, setSearchTerm] = useState('');
   const [words, setWords] = useState<Word[]>([]);
   const [updWord, setUpdWord] = useState<Word>();
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    handleSearchRandom();
+  }, []);
+
   const handleSearch = async () => {
     setError('');
     const response = await searchWords(searchTerm);
+    if (response.data.error) {
+      setWords([]);
+      setError(response.data.error.message)
+    } else {
+      setWords(response.data.data);
+    }
+  };
+
+  const handleSearchRandom = async () => {
+    setError('');
+    const response = await getRandomWords(4);
     if (response.data.error) {
       setWords([]);
       setError(response.data.error.message)

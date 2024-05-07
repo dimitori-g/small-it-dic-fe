@@ -10,6 +10,7 @@ api.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 
 export const getAllWords = () => api.get('');
 export const getWordById = (id: number) => api.get(`/${id}`);
+export const getRandomWords = (n: number) => api.get(`/random/${n}`);
 export const createWord = (word: Word) => api.post('', word);
 export const updateWord = (word: Word) => api.put('', word);
 export const deleteWord = (id: number) => api.delete(`/${id}`);
