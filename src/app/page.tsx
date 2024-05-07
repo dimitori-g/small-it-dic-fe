@@ -116,7 +116,7 @@ function SearchComponent() {
           <div>{word.english}</div>
           <div className={styles.word_buttons}>
             <button className={styles.button} onClick={() => setUpdWord(word)}>update</button>
-            <button className={styles.button} disabled onClick={() => handleDelete(word.id)}>delete</button>
+            <button className={styles.button} onClick={() => handleDelete(word.id)}>delete</button>
           </div>
         </div>
       ))}
