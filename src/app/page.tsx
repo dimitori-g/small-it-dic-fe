@@ -21,30 +21,37 @@ function SearchComponent() {
   const [words, setWords] = useState<Word[]>([]);
   const [updWord, setUpdWord] = useState<Word>();
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     handleSearchRandom();
   }, []);
 
   const handleSearch = async () => {
+    setWords([]);
     setError('');
+    setLoading(true);
     const response = await searchWords(searchTerm);
     if (response.data.error) {
-      setWords([]);
-      setError(response.data.error.message)
+      setError(response.data.error.message);
+      setLoading(false);
     } else {
       setWords(response.data.data);
+      setLoading(false);
     }
   };
 
   const handleSearchRandom = async () => {
+    setWords([]);
     setError('');
+    setLoading(true);
     const response = await getRandomWords(4);
     if (response.data.error) {
-      setWords([]);
-      setError(response.data.error.message)
+      setError(response.data.error.message);
+      setLoading(false);
     } else {
       setWords(response.data.data);
+      setLoading(false);
     }
   };
 
@@ -72,8 +79,8 @@ function SearchComponent() {
 
   const handleUpdate =async (word: Word) => {
     await updateWord(word);
+    setWords([word]);
     setUpdWord(undefined);
-    handleSearch();
   }
 
   if (updWord) {
@@ -123,6 +130,7 @@ function SearchComponent() {
         <button className={styles.button} onClick={handleClear}>clear</button>
       </div>
       {error && <div className={styles.error}>{error}</div>}
+      {loading && <div className={styles.loading}>Loading...</div>}
       <div className={styles.words}>
       {words.map((word: Word) => (
         <div key={word.id} className={styles.word}>
